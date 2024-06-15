@@ -1078,7 +1078,7 @@ public class VodController extends BaseController {
 
     public void processCmd(String text) {
         if (text.equals("播放下一个")) {
-            this.listener.playNext(true);
+            mNextBtn.performClick();
             Log.d("VodController", "playnext");
         }
     }
