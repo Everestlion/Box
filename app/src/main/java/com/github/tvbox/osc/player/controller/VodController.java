@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1073,6 +1074,13 @@ public class VodController extends BaseController {
         skipEnd = true;
         mHandler.removeMessages(1004);
         mHandler.sendEmptyMessageDelayed(1004, 100);
+    }
+
+    public void processCmd(String text) {
+        if (text.equals("播放下一个")) {
+            this.listener.playNext(true);
+            Log.d("VodController", "playnext");
+        }
     }
 
     public interface VodControlListener {
