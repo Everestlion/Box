@@ -23,4 +23,6 @@ public interface DataReceiver {
     void onPushReceived(String url);
 
     void onMirrorReceived(String id, String sourceKey);
+
+    void onVoiceCmdReceived(String text);
 }
