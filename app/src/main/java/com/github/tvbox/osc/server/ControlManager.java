@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.tvbox.osc.event.RefreshEvent;
+import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.receiver.DetailReceiver;
 import com.github.tvbox.osc.receiver.SearchReceiver;
 import com.github.tvbox.osc.util.HawkConfig;
@@ -25,6 +27,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  */
 public class ControlManager {
     private static ControlManager instance;
+    private VodController mVodController;
     private RemoteServer mServer = null;
     public static Context mContext;
 
@@ -45,6 +48,10 @@ public class ControlManager {
 
     public static void init(Context context) {
         mContext = context;
+    }
+
+    public static void setVodController(VodController vodController) {
+        instance.mVodController = vodController;
     }
 
     public String getAddress(boolean local) {
@@ -110,6 +117,11 @@ public class ControlManager {
                         intent.putExtras(bundle);
                         mContext.sendBroadcast(intent);
                     }
+                }
+
+                @Override
+                public void onVoiceCmdReceived(String text) {
+                    Log.d("Linkman", "onVoiceCmdReceived");
                 }
             });
             try {
