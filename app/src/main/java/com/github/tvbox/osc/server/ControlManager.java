@@ -121,7 +121,10 @@ public class ControlManager {
 
                 @Override
                 public void onVoiceCmdReceived(String text) {
-                    Log.d("Linkman", "onVoiceCmdReceived");
+                    Log.d("Linkman", "onVoiceCmdReceived" + text);
+                    if(mVodController != null && text.length() > 0) {
+                        mVodController.processCmd(text);
+                    }
                 }
             });
             try {
