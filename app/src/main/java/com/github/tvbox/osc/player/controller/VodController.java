@@ -38,6 +38,7 @@ import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.thirdparty.Kodi;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
+import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.subtitle.widget.SimpleSubtitleView;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.ui.activity.HomeActivity;
@@ -227,6 +228,7 @@ public class VodController extends BaseController {
                 }
             }
         };
+        ControlManager.setVodController(this);
     }
 
     // top container
