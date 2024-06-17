@@ -165,6 +165,7 @@ public class PlayActivity extends BaseActivity {
         initView();
         initViewModel();
         initData();
+        ControlManager.setPlayActivity(this);
     }
 
     private void initView() {
@@ -1134,7 +1135,6 @@ public class PlayActivity extends BaseActivity {
             onStopCalled = false;
             mVideoView.resume();
         }
-        ControlManager.setPlayActivity(this);
     }
 
     @Override
