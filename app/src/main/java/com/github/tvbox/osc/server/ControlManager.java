@@ -69,7 +69,11 @@ public class ControlManager {
         Message msg = Message.obtain();
         msg.what = 10086;
         msg.obj = cmd;
-        instance.mPlayActivity.obtainMessage(msg);
+        if (get().mPlayActivity != null) {
+            instance.mPlayActivity.obtainMessage(msg);
+        } else {
+            Log.d("Linkman", "mPlayActivity is null");
+        }
     }
 
     public String getAddress(boolean local) {
