@@ -232,6 +232,14 @@ public class VodController extends BaseController {
         ControlManager.setVodController(this);
     }
 
+    @Override
+    protected void handleVoiceCmd(String cmd) {
+        Log.d("Linkman", "handleVoiceCmd" + cmd);
+        if("播放下一个".equals(cmd)){
+            listener.playNext(false);
+        }
+    }
+
     // top container
     LinearLayout mTopHide;
     LinearLayout mTopRoot;
@@ -1081,6 +1089,10 @@ public class VodController extends BaseController {
             mNextBtn.performClick();
             Log.d("VodController", "playnext");
         }
+    }
+
+    public void obtainMessage(Message msg) {
+        this.mHandler.sendMessage(msg);
     }
 
     public interface VodControlListener {
