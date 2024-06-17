@@ -235,9 +235,24 @@ public class VodController extends BaseController {
     @Override
     protected void handleVoiceCmd(String cmd) {
         Log.d("Linkman", "handleVoiceCmd" + cmd);
-        if("播放下一个".equals(cmd)){
-            listener.playNext(false);
+        switch (cmd) {
+            case "播放上一个":
+            case "播放上一集":
+                listener.playPre();
+                break;
+            case "播放下一个":
+            case "播放下一集":
+                listener.playNext(false);
+                break;
+            case "暂停":
+            case "暂停播放":
+            case "电视暂停播放":
+                mPauseBtn.performClick();
+                break;
+            default:
+                break;
         }
+
     }
 
     // top container
