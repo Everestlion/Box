@@ -62,6 +62,7 @@ public class ControlManager {
     }
 
     public static void setPlayActivity(PlayActivity playActivity) {
+        Log.d("Linkman", "setPlayActivity");
         get().mPlayActivity = playActivity;
     }
 
