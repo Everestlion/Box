@@ -58,6 +58,7 @@ public class ControlManager {
     }
 
     public static void playFinish() {
+        Log.d("Linkman", "playActivity playFinish");
         get().mPlayActivity = null;
     }
 
