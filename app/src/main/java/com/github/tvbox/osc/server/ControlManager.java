@@ -54,15 +54,15 @@ public class ControlManager {
     }
 
     public static void setVodController(VodController vodController) {
-        instance.mVodController = vodController;
+        get().mVodController = vodController;
     }
 
     public static void playFinish() {
-        instance.mPlayActivity = null;
+        get().mPlayActivity = null;
     }
 
     public static void setPlayActivity(PlayActivity playActivity) {
-        instance.mPlayActivity = playActivity;
+        get().mPlayActivity = playActivity;
     }
 
     public static void obtainMessage(String cmd) {
@@ -70,7 +70,7 @@ public class ControlManager {
         msg.what = 10086;
         msg.obj = cmd;
         if (get().mPlayActivity != null) {
-            instance.mPlayActivity.obtainMessage(msg);
+            get().mPlayActivity.obtainMessage(msg);
         } else {
             Log.d("Linkman", "mPlayActivity is null");
         }
