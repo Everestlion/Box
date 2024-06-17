@@ -185,8 +185,6 @@ public class PlayActivity extends BaseActivity {
                     }
                 } else if (msg.what == 300) {
                     setTip((String)msg.obj, false, true);
-                } else if (msg.what == 10086) {
-                    handleVoiceCmd((String)msg.obj);
                 }
                 return false;
             }
@@ -317,16 +315,6 @@ public class PlayActivity extends BaseActivity {
         mVideoView.setmHandler(mHandler);
     }
 
-    private void handleVoiceCmd(String cmd) {
-        Log.d("Linkman", "handleVoiceCmd" + cmd);
-        if("播放下一个".equals(cmd)){
-            playNext(false);
-        }
-    }
-
-    public void obtainMessage(Message msg) {
-        mHandler.sendMessage(msg);
-    }
 
     //设置字幕
     void setSubtitle(String path) {
