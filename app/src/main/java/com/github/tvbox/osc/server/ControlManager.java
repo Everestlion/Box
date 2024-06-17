@@ -54,6 +54,7 @@ public class ControlManager {
     }
 
     public static void setVodController(VodController vodController) {
+        Log.d("Linkman", "setVodController");
         get().mVodController = vodController;
     }
 
@@ -71,8 +72,8 @@ public class ControlManager {
         Message msg = Message.obtain();
         msg.what = 10086;
         msg.obj = cmd;
-        if (get().mPlayActivity != null) {
-            get().mPlayActivity.obtainMessage(msg);
+        if (get().mVodController != null) {
+            get().mVodController.obtainMessage(msg);
         } else {
             Log.d("Linkman", "mPlayActivity is null");
         }
