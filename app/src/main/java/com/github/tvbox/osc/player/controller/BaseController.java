@@ -87,6 +87,9 @@ public abstract class BaseController extends BaseVideoController implements Gest
                         mDialogBrightness.setVisibility(GONE);
                         break;
                     }
+                    case 10086: {
+                        handleVoiceCmd((String)msg.obj);
+                    }
                     default: {
                         if (mHandlerCallback != null)
                             mHandlerCallback.callback(msg);
@@ -98,6 +101,8 @@ public abstract class BaseController extends BaseVideoController implements Gest
         });
         mHandler.post(mRunnable);
     }
+
+    protected abstract void handleVoiceCmd(String obj);
 
     public BaseController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
