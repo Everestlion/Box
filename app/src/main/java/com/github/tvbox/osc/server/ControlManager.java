@@ -67,7 +67,7 @@ public class ControlManager {
 
     public static void obtainMessage(String cmd) {
         Message msg = Message.obtain();
-        msg.what = 201;
+        msg.what = 10086;
         msg.obj = cmd;
         instance.mPlayActivity.obtainMessage(msg);
     }
