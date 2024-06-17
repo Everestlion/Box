@@ -49,6 +49,11 @@ public class LiveController extends BaseController {
     }
 
     @Override
+    protected void handleVoiceCmd(String obj) {
+
+    }
+    
+    @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         if (listener.singleTap(e))
             return true;
