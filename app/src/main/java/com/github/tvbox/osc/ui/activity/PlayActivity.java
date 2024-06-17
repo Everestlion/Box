@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Rational;
 import android.view.KeyEvent;
 import android.view.View;
@@ -183,6 +184,8 @@ public class PlayActivity extends BaseActivity {
                     }
                 } else if (msg.what == 300) {
                     setTip((String)msg.obj, false, true);
+                } else if (msg.what == 10086) {
+                    handleVoiceCmd((String)msg.obj);
                 }
                 return false;
             }
@@ -311,6 +314,17 @@ public class PlayActivity extends BaseActivity {
         });
         mVideoView.setVideoController(mController);
         mVideoView.setmHandler(mHandler);
+    }
+
+    private void handleVoiceCmd(String cmd) {
+        Log.d("Linkman", "handleVoiceCmd" + cmd);
+        if("播放下一个".equals(cmd)){
+            playNext(false);
+        }
+    }
+
+    public void obtainMessage(Message msg) {
+        mHandler.sendMessage(msg);
     }
 
     //设置字幕
@@ -1120,6 +1134,7 @@ public class PlayActivity extends BaseActivity {
             onStopCalled = false;
             mVideoView.resume();
         }
+        ControlManager.setPlayActivity(this);
     }
 
     @Override
@@ -1199,6 +1214,7 @@ public class PlayActivity extends BaseActivity {
         Thunder.stop(false); // 停止磁力下载
         Jianpian.finish();//停止p2p下载
         App.getInstance().setDashData(null);
+        ControlManager.playFinish();
     }
 
     private VodInfo mVodInfo;
