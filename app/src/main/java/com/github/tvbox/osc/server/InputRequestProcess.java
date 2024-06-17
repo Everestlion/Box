@@ -1,5 +1,7 @@
 package com.github.tvbox.osc.server;
 
+import android.os.Message;
+
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
@@ -69,7 +71,8 @@ public class InputRequestProcess implements RequestProcess {
                         }
                         case "voicecmd": {
                             // 语音指令
-                            mDataReceiver.onVoiceCmdReceived(params.get("cmd").trim());
+
+                            ControlManager.obtainMessage(params.get("cmd").trim());
                             break;
                         }
                     }
