@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.receiver.DetailReceiver;
 import com.github.tvbox.osc.receiver.SearchReceiver;
+import com.github.tvbox.osc.ui.activity.PlayActivity;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.orhanobut.hawk.Hawk;
 
@@ -30,6 +32,7 @@ public class ControlManager {
     private VodController mVodController;
     private RemoteServer mServer = null;
     public static Context mContext;
+    private PlayActivity mPlayActivity;
 
     private ControlManager() {
 
@@ -52,6 +55,21 @@ public class ControlManager {
 
     public static void setVodController(VodController vodController) {
         instance.mVodController = vodController;
+    }
+
+    public static void playFinish() {
+        instance.mPlayActivity = null;
+    }
+
+    public static void setPlayActivity(PlayActivity playActivity) {
+        instance.mPlayActivity = playActivity;
+    }
+
+    public static void obtainMessage(String cmd) {
+        Message msg = Message.obtain();
+        msg.what = 201;
+        msg.obj = cmd;
+        instance.mPlayActivity.obtainMessage(msg);
     }
 
     public String getAddress(boolean local) {
