@@ -2,6 +2,8 @@ package com.github.tvbox.osc.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.github.tvbox.osc.bean.Movie;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.event.ServerEvent;
+import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.ui.adapter.FastListAdapter;
 import com.github.tvbox.osc.ui.adapter.FastSearchAdapter;
 import com.github.tvbox.osc.ui.adapter.SearchWordAdapter;
@@ -78,6 +81,8 @@ public class FastSearchActivity extends BaseActivity {
     private final List<String> quickSearchWord = new ArrayList<>();
     private HashMap<String, String> mCheckSources = null;
 
+    private Handler mHandler;
+
     private final View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View itemView, boolean hasFocus) {
@@ -109,6 +114,23 @@ public class FastSearchActivity extends BaseActivity {
         initView();
         initViewModel();
         initData();
+        ControlManager.setFastSearchActivity(this);
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                if (msg.what == 1) {
+                    int pos = (int)msg.obj;
+                    if (pos >= 0) {
+                        mGridView.setSelection(pos);
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    public void obtainMessage(Message msg) {
+        mHandler.sendMessage(msg);
     }
 
     private List<Runnable> pauseRunnable = null;
