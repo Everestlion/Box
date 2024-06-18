@@ -74,7 +74,7 @@ public class InputRequestProcess implements RequestProcess {
                                 mDataReceiver.onTextReceived(cmd.replace("搜索", ""));
                             }if(cmd.startsWith("选择第")) {
                                 int beginIndex = "选择第".length();
-                                int endIndex = cmd.endsWith("个") ? cmd.length() - "个".length() : cmd.length();
+                                int endIndex = cmd.endsWith("个") ? cmd.length() - "个".length() - 1 : cmd.length() - 1;
                                 String posStr = cmd.substring(beginIndex, endIndex);
                                 ControlManager.obtainMessageSearch(posStr);
                             } else {
