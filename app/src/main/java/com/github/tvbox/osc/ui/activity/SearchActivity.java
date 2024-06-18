@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -128,12 +130,31 @@ public class SearchActivity extends BaseActivity {
     
     private static Boolean hasKeyBoard;
 
+    private Handler mHandler;
+
     @Override
     protected void init() {
     	disableKeyboard(SearchActivity.this);
         initView();
         initViewModel();
         initData();
+        ControlManager.setSearchActivity(this);
+        mHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                if (msg.what == 1) {
+                    int pos = (int)msg.obj;
+                    if (pos >= 0) {
+                        mGridView.setSelection(pos);
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    public void obtainMessage(Message msg) {
+        mHandler.sendMessage(msg);
     }
     
     /*
