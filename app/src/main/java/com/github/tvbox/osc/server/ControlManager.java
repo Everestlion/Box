@@ -100,7 +100,7 @@ public class ControlManager {
         Message msg = Message.obtain();
         msg.what = 1;
         msg.obj = chineseToArabic(posStr) - 1;
-        Log.d("Linkman", "obtainMessageSearch:" + msg.obj);
+        Log.d("Linkman", "obtainMessageSearch:" + posStr + " " + msg.obj);
         if (get().mSearchActivity != null) {
             get().mSearchActivity.obtainMessage(msg);
         } else {
