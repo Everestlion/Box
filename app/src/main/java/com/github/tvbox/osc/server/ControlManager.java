@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.server;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import com.github.tvbox.osc.receiver.DetailReceiver;
 import com.github.tvbox.osc.receiver.SearchReceiver;
 import com.github.tvbox.osc.ui.activity.FastSearchActivity;
 import com.github.tvbox.osc.ui.activity.PlayActivity;
+import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.orhanobut.hawk.Hawk;
 
@@ -90,6 +92,9 @@ public class ControlManager {
         } else {
             Log.d("Linkman", "mFastSearchActivity is null");
         }
+        Activity ativity = AppManager.getInstance().currentActivity();
+        Log.d("Linkman", ativity.getPackageName());
+        Log.d("Linkman", ativity.toString());
     }
 
     public static int chineseToArabic(String chineseNumber) {
@@ -131,6 +136,7 @@ public class ControlManager {
     }
 
     public static void setFastSearchActivity(FastSearchActivity fastSearchActivity) {
+        Log.d("Linkman", "setFastSearchActivity");
         get().mFastSearchActivity = fastSearchActivity;
     }
 
