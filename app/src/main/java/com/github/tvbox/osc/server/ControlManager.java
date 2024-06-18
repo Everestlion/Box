@@ -4,11 +4,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.github.tvbox.osc.event.RefreshEvent;
+import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.receiver.DetailReceiver;
 import com.github.tvbox.osc.receiver.SearchReceiver;
+import com.github.tvbox.osc.ui.activity.FastSearchActivity;
+import com.github.tvbox.osc.ui.activity.PlayActivity;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.orhanobut.hawk.Hawk;
 
@@ -25,8 +30,11 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  */
 public class ControlManager {
     private static ControlManager instance;
+    private VodController mVodController;
     private RemoteServer mServer = null;
     public static Context mContext;
+    private PlayActivity mPlayActivity;
+    private FastSearchActivity mFastSearchActivity;
 
     private ControlManager() {
 
@@ -45,6 +53,85 @@ public class ControlManager {
 
     public static void init(Context context) {
         mContext = context;
+    }
+
+    public static void setVodController(VodController vodController) {
+        Log.d("Linkman", "setVodController");
+        get().mVodController = vodController;
+    }
+
+    public static void playFinish() {
+        Log.d("Linkman", "playActivity playFinish");
+        get().mPlayActivity = null;
+    }
+
+    public static void setPlayActivity(PlayActivity playActivity) {
+        Log.d("Linkman", "setPlayActivity");
+        get().mPlayActivity = playActivity;
+    }
+
+    public static void obtainMessagePlayControl(String cmd) {
+        Message msg = Message.obtain();
+        msg.what = 10086;
+        msg.obj = cmd;
+        if (get().mVodController != null) {
+            get().mVodController.obtainMessage(msg);
+        } else {
+            Log.d("Linkman", "mVodController is null");
+        }
+    }
+
+    public static void obtainMessageSearch(String posStr) {
+        Message msg = Message.obtain();
+        msg.what = 1;
+        msg.obj = chineseToArabic(posStr) - 1;
+        if (get().mFastSearchActivity != null) {
+            get().mFastSearchActivity.obtainMessage(msg);
+        } else {
+            Log.d("Linkman", "mFastSearchActivity is null");
+        }
+    }
+
+    public static int chineseToArabic(String chineseNumber) {
+        String[] simpleChineseNumbers = {"零", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
+        char[] chineseNumberCharArray = chineseNumber.toCharArray();
+        int result = 0;
+        int temp = 1;
+        int count = 0;
+
+        for (int i = 0; i < chineseNumberCharArray.length; i++) {
+            boolean isUnit = false;
+            for (int j = 0; j < simpleChineseNumbers.length; j++) {
+                if (String.valueOf(chineseNumberCharArray[i]).equals(simpleChineseNumbers[j])) {
+                    if (j == 0) {
+                        temp = 1;
+                    } else if (i == chineseNumberCharArray.length - 1 && (j == 1 || j == 2 || j == 3 || j == 4)) { // 十-一十
+                        temp = j;
+                    } else if (i == chineseNumberCharArray.length - 1 && j == 9) { // 十一
+                        temp = 11;
+                    } else if (i != chineseNumberCharArray.length - 1 && (j == 4 || j == 9)) { // 百十、千十
+                        isUnit = true;
+                        temp = j + 1;
+                    } else {
+                        temp = j + 1;
+                    }
+
+                    if (isUnit) {
+                        result += temp * Math.pow(10, count);
+                        count++;
+                        isUnit = false;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static void setFastSearchActivity(FastSearchActivity fastSearchActivity) {
+        get().mFastSearchActivity = fastSearchActivity;
     }
 
     public String getAddress(boolean local) {
@@ -109,6 +196,14 @@ public class ControlManager {
                         intent.setComponent(new ComponentName(mContext, DetailReceiver.class));
                         intent.putExtras(bundle);
                         mContext.sendBroadcast(intent);
+                    }
+                }
+
+                @Override
+                public void onVoiceCmdReceived(String text) {
+                    Log.d("Linkman", "onVoiceCmdReceived" + text);
+                    if(mVodController != null && text.length() > 0) {
+                        mVodController.processCmd(text);
                     }
                 }
             });
