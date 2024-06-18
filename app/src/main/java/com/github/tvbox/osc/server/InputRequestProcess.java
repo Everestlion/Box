@@ -67,6 +67,21 @@ public class InputRequestProcess implements RequestProcess {
                             mDataReceiver.onMirrorReceived(params.get("id").trim(), params.get("sourceKey").trim());
                             return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, "mirrored");
                         }
+                        case "voicecmd": {
+                            // 语音指令
+                            String cmd = params.get("cmd").trim();
+                            if(cmd.startsWith("搜索")) {
+                                mDataReceiver.onTextReceived(cmd.replace("搜索", ""));
+                            }if(cmd.startsWith("选择第")) {
+                                int beginIndex = "选择第".length();
+                                int endIndex = cmd.endsWith("个") ? cmd.length() - "个".length() : cmd.length();
+                                String posStr = cmd.substring(beginIndex, endIndex);
+                                ControlManager.obtainMessageSearch(posStr);
+                            } else {
+                                ControlManager.obtainMessagePlayControl(cmd);
+                            }
+                            break;
+                        }
                     }
                 }
                 return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, "ok");
