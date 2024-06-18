@@ -15,6 +15,7 @@ import com.github.tvbox.osc.receiver.DetailReceiver;
 import com.github.tvbox.osc.receiver.SearchReceiver;
 import com.github.tvbox.osc.ui.activity.FastSearchActivity;
 import com.github.tvbox.osc.ui.activity.PlayActivity;
+import com.github.tvbox.osc.ui.activity.SearchActivity;
 import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.orhanobut.hawk.Hawk;
@@ -37,6 +38,7 @@ public class ControlManager {
     public static Context mContext;
     private PlayActivity mPlayActivity;
     private FastSearchActivity mFastSearchActivity;
+    private SearchActivity mSearchActivity;
 
     private ControlManager() {
 
@@ -83,18 +85,28 @@ public class ControlManager {
         }
     }
 
+    public static void obtainMessageFastSearch(String cmd) {
+        Message msg = Message.obtain();
+        msg.what = 1;
+        msg.obj = cmd;
+        if (get().mVodController != null) {
+            get().mVodController.obtainMessage(msg);
+        } else {
+            Log.d("Linkman", "mVodController is null");
+        }
+    }
+
     public static void obtainMessageSearch(String posStr) {
         Message msg = Message.obtain();
         msg.what = 1;
         msg.obj = chineseToArabic(posStr) - 1;
-        if (get().mFastSearchActivity != null) {
-            get().mFastSearchActivity.obtainMessage(msg);
+        Log.d("Linkman", "obtainMessageSearch:" + msg.obj);
+        if (get().mSearchActivity != null) {
+            get().mSearchActivity.obtainMessage(msg);
         } else {
-            Log.d("Linkman", "mFastSearchActivity is null");
+            Log.d("Linkman", "mSearchActivity is null");
         }
-        Activity ativity = AppManager.getInstance().currentActivity();
-        Log.d("Linkman", ativity.getPackageName());
-        Log.d("Linkman", ativity.toString());
+
     }
 
     public static int chineseToArabic(String chineseNumber) {
@@ -138,6 +150,10 @@ public class ControlManager {
     public static void setFastSearchActivity(FastSearchActivity fastSearchActivity) {
         Log.d("Linkman", "setFastSearchActivity");
         get().mFastSearchActivity = fastSearchActivity;
+    }
+
+    public static void setSearchActivity(SearchActivity searchActivity) {
+        get().mSearchActivity = searchActivity;
     }
 
     public String getAddress(boolean local) {
